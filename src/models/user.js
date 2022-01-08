@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     minlength : 7,
     validate(value){
         if(value.toLowerCase().includes('password')){
-            throw new Error("Password can not caontain 'password' ")
+            throw new Error("Password can not contain 'password' ")
         }
     }
   },
@@ -68,14 +68,12 @@ userSchema.virtual('tasks', {
 userSchema.methods.toJSON = function (){
   const user = this
 
-
   const userObject = user.toObject()
   delete userObject.password
   delete userObject.tokens
   delete userObject.avatar
 
   return userObject
-
 
 }
 
@@ -86,7 +84,6 @@ userSchema.methods.generateAuthToken = async function(){
   user.tokens = user.tokens.concat({token})
   await user.save()
   return token 
-
 }
 
 
@@ -119,7 +116,6 @@ userSchema.pre('save', async function(next){
   if(user.isModified("password")){
     user.password = await bcrypt.hash(user.password, 8)
   }
-
 
   next()
 

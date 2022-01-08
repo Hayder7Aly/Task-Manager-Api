@@ -12,8 +12,8 @@ userRouter.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
-    sendWelcomeEmail(user.email, user.name)
     const token = await user.generateAuthToken()
+    sendWelcomeEmail(user.email, user.name)
     res.status(201).send({user, token});
   } catch (err) {
     res.status(400).send(err);
@@ -70,10 +70,7 @@ userRouter.post("/users/logoutall", auth, async(req,res) => {
 
 
 userRouter.get("/users/me", auth , async (req, res) => {
-
   res.send(req.user)
-
-
 });
 
 
@@ -81,27 +78,18 @@ userRouter.get("/users/me", auth , async (req, res) => {
 userRouter.patch("/users/me", auth,  async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password", "age"];
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
   if (!isValidOperation) {
     return res.status(400).send({ error: "Invalid Updates !" });
   }
 
   try {
-    // 1.  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    //   new: true,
-    //   runValidators: true,
-    // });
-
-    // 2. const user = await User.findById(req.user._id)
-
 
     updates.forEach(update => req.user[update] = req.body[update])
     await req.user.save()
-
     res.send(req.user);
+    
   } catch (err) {
     res.status(400).send();
   }

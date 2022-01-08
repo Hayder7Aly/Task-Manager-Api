@@ -81,10 +81,7 @@ taskRouter.patch("/tasks/:id",auth, async (req, res) => {
       }
       updates.forEach(update => task[update] = req.body[update])
       await task.save()
-    // const task = await Tasks.findByIdAndUpdate(req.params.id, req.body, {
-    //   new: true,
-    //   runValidators: true,
-    // });
+
      res.send(task);
   } catch (err) {
     res.status(400).send(err);
